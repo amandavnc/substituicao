@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package datamapper;
 
 import datamapper.exceptions.NonexistentEntityException;
@@ -19,19 +20,32 @@ import javax.persistence.EntityNotFoundException;
  */
 public class ProfessorJpaController implements Serializable {
 
+    private EntityManagerFactory emf = null;
+    
+    /**
+     *
+     * @param emf
+     */
     public ProfessorJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
 
+    /**
+     *
+     * @return
+     */
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return this.emf.createEntityManager();
     }
 
+    /**
+     *
+     * @param professor
+     */
     public void create(Professor professor) {
         EntityManager em = null;
         try {
-            em = getEntityManager();
+            em = this.getEntityManager();
             em.getTransaction().begin();
             em.persist(professor);
             em.getTransaction().commit();
@@ -42,7 +56,12 @@ public class ProfessorJpaController implements Serializable {
         }
     }
 
-    public void edit(Professor professor) throws NonexistentEntityException, Exception {
+    /**
+     *
+     * @param professor
+     * @throws NonexistentEntityException
+     */
+    public void edit(Professor professor) throws NonexistentEntityException{
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -53,7 +72,7 @@ public class ProfessorJpaController implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = professor.getId();
-                if (findProfessor(id) == null) {
+                if (this.findProfessor(id) == null) {
                     throw new NonexistentEntityException("The professor with id " + id + " no longer exists.");
                 }
             }
@@ -65,6 +84,11 @@ public class ProfessorJpaController implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @throws NonexistentEntityException
+     */
     public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -86,16 +110,26 @@ public class ProfessorJpaController implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Professor> findProfessorEntities() {
-        return findProfessorEntities(true, -1, -1);
+        return this.findProfessorEntities(true, -1, -1);
     }
 
+    /**
+     *
+     * @param maxResults
+     * @param firstResult
+     * @return
+     */
     public List<Professor> findProfessorEntities(int maxResults, int firstResult) {
-        return findProfessorEntities(false, maxResults, firstResult);
+        return this.findProfessorEntities(false, maxResults, firstResult);
     }
 
     private List<Professor> findProfessorEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
+        EntityManager em = this.getEntityManager();
         try {
             Query q = em.createQuery("select object(o) from Professor as o");
             if (!all) {
@@ -108,6 +142,11 @@ public class ProfessorJpaController implements Serializable {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public Professor findProfessor(Long id) {
         EntityManager em = getEntityManager();
         try {
@@ -117,26 +156,42 @@ public class ProfessorJpaController implements Serializable {
         }
     }
     
+    /**
+     *
+     * @param nome
+     * @return
+     */
     public Professor findProfessor(String nome){
         List<Professor> professores = this.findProfessorEntities();
         for(Professor professor : professores){
-            if(professor.getNome().equals(nome))
+            if(professor.getNome().equals(nome)){
                 return professor;
+            }
         }
         
         return null;
     }
     
+    /**
+     *
+     * @param username
+     * @return
+     */
     public Professor findProfessorPorUsername(String username){
         List<Professor> professores = this.findProfessorEntities();
         for(Professor professor : professores){
-            if(professor.getUsername().equals(username))
+            if(professor.getUsername().equals(username)){
                 return professor;
+            }
         }
         
         return null;
     }    
 
+    /**
+     *
+     * @return
+     */
     public int getProfessorCount() {
         EntityManager em = getEntityManager();
         try {
