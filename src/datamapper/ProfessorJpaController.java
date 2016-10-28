@@ -23,23 +23,28 @@ public class ProfessorJpaController implements Serializable {
     private EntityManagerFactory emf = null;
     
     /**
-     *
-     * @param emf
+     * <h1>Constructor of the class ProfessorJpaController</h1>
+     * <p>This constructor receveis only one parameter, an EntityManagerFactory
+     * and it sets the variable emf</p>
+     * @param emf EntityManagerFactory
      */
     public ProfessorJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
     /**
-     *
-     * @return
+     * <h1>Get Entity Manager</h1>
+     * <p>This method is a simple getter to an EntityManager. It has no parameters.</p>
+     * @return EntityManager
      */
     public EntityManager getEntityManager() {
         return this.emf.createEntityManager();
     }
 
     /**
-     *
+     * <h1>Create a Professor</h1>
+     * <p>Simply implements the creation of a Professor in the database, persisting and commiting it.
+     * It has no returns, void method that receives an Object of a Professor as parameter</p>
      * @param professor
      */
     public void create(Professor professor) {
@@ -57,7 +62,10 @@ public class ProfessorJpaController implements Serializable {
     }
 
     /**
-     *
+     * <h1>Update Professor</h1>
+     * <p>This method implements the Update part of a database of the Entity Professor.
+     * It receveis a professor Object, in case of this object doens't exist it throws an exception.
+     * It is a void method.</p>
      * @param professor
      * @throws NonexistentEntityException
      */
@@ -85,7 +93,9 @@ public class ProfessorJpaController implements Serializable {
     }
 
     /**
-     *
+     * <h1>Delete an Professor</h1>
+     * <p>This method receives the id of a Professor instead of the object in fact. It searches for
+     * the respective professor and delete it. In case it doesn't exist an exception is thrown.</p>
      * @param id
      * @throws NonexistentEntityException
      */
@@ -111,23 +121,37 @@ public class ProfessorJpaController implements Serializable {
     }
 
     /**
-     *
-     * @return
+     * <h1>Find Professor Entities</h1>
+     * <p>This method only calls another one in the same class. Th only difference in this method are
+     * the parameters. This one has no parameters and it returns a List of professor's objects.</p>
+     * @return List of Professors
      */
     public List<Professor> findProfessorEntities() {
         return this.findProfessorEntities(true, -1, -1);
     }
 
     /**
-     *
+     * <h1>Find Professor Entities 2 </h1>
+     * <p>This method is called by the first Find Professor Entities method and it only calls another 
+     * method with different parameters. This is only necessary because its a Public method that calls
+     * a private one</p>
      * @param maxResults
      * @param firstResult
-     * @return
+     * @return List of Professors
      */
     public List<Professor> findProfessorEntities(int maxResults, int firstResult) {
         return this.findProfessorEntities(false, maxResults, firstResult);
     }
 
+    /**
+     * <h1>Find Professor Entities 3 </h1>
+     * <p>This method is called by the second Find Professor Entities method and it only calls another 
+     * method with different parameters. This one acces the database and get as return a list of 
+     * professors within the asked parameters.</p>
+     * @param maxResults
+     * @param firstResult
+     * @return List of Professors
+     */
     private List<Professor> findProfessorEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = this.getEntityManager();
         try {
@@ -143,9 +167,11 @@ public class ProfessorJpaController implements Serializable {
     }
 
     /**
-     *
+     * <h1>Find Professor</h1>
+     * <p>Search method thats uses Eager way to get a Professor, found by it Id, passed as
+     * parameter.</p>
      * @param id
-     * @return
+     * @return Professor object
      */
     public Professor findProfessor(Long id) {
         EntityManager em = getEntityManager();
@@ -157,9 +183,11 @@ public class ProfessorJpaController implements Serializable {
     }
     
     /**
-     *
+     * <h1>Find Professor by Name</h1>
+     * <p>This method search in the list of Professors returned by the method findProfessorEntities
+     * the Professor with the same name as the parameter</p>
      * @param nome
-     * @return
+     * @return Professor Object or null if it doesn't find any one
      */
     public Professor findProfessor(String nome){
         List<Professor> professores = this.findProfessorEntities();
@@ -173,9 +201,11 @@ public class ProfessorJpaController implements Serializable {
     }
     
     /**
-     *
+     * <h1>Find Professor by Name</h1>
+     * <p>This method search in the list of Professors returned by the method findProfessorEntities
+     * the Professor with the same username as the parameter</p>
      * @param username
-     * @return
+     * @return Professor Object or null if it doesn't find any one
      */
     public Professor findProfessorPorUsername(String username){
         List<Professor> professores = this.findProfessorEntities();
@@ -189,8 +219,10 @@ public class ProfessorJpaController implements Serializable {
     }    
 
     /**
-     *
-     * @return
+     * <h1>Count Professors</h1>
+     * <p>This method search in the database all professors and count then, so it can return the int 
+     * total number of professors</p>
+     * @return the number of Professors in total
      */
     public int getProfessorCount() {
         EntityManager em = getEntityManager();
